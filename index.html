@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yoga & The Brain: An Interactive Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #185FA5;
+            --accent: #4f7cff;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --stress: #ef4444;
+            --zen: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding-bottom: 100px; }
+
+        .hero {
+            position: relative;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            background: linear-gradient(rgba(24, 95, 165, 0.75), rgba(24, 95, 165, 0.75)), 
+                        url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 60px;
+            border-radius: 0 0 40px 40px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(45px, 8vw, 72px);
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 300;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .section-padding { padding: 0 40px; }
+
+        .lab-widget {
+            background: white;
+            border-radius: 40px;
+            padding: 45px;
+            margin: 60px 0;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .lab-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .viz-pane {
+            position: relative;
+            background: #f8fafc;
+            border-radius: 25px;
+            padding: 20px;
+            border: 1px solid #f1f5f9;
+        }
+
+        #neural-connection {
+            stroke-dasharray: 4;
+            animation: flow 2s linear infinite;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes flow { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }
+
+        .controls h3 { font-family: 'Playfair Display'; font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; }
+        .controls p { font-size: 0.9rem; color: #64748b; margin-bottom: 25px; }
+
+        input[type=range] {
+            width: 100%;
+            height: 12px;
+            border-radius: 10px;
+            appearance: none;
+            background: #e2e8f0;
+            outline: none;
+            margin-bottom: 15px;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .labels { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; color: var(--primary); }
+
+        .stat-card {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 16px;
+            margin-top: 20px;
+            border-left: 6px solid var(--primary);
+        }
+        .stat-card span { font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+        .stat-card strong { display: block; font-size: 1rem; color: var(--text); }
+
+        .wave-monitor {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        .wave-row { margin-bottom: 10px; }
+        .wave-row span { color: #94a3b8; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; display: block; }
+        .wave-svg { width: 100%; height: 30px; display: block; }
+        .wave-path { fill: none; stroke-width: 2; }
+
+        .essay-body { font-size: 1.15rem; color: #334155; line-height: 1.9; }
+        .essay-body a { color: var(--primary); text-decoration: none; border-bottom: 1px solid rgba(24, 95, 165, 0.3); font-weight: 600; }
+        
+        h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--primary); margin: 60px 0 20px; }
+
+        .figure-container { margin: 50px 0; text-align: center; }
+        .essay-img {
+            width: 100%;
+            max-width: 700px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .caption { display: block; margin-top: 15px; font-size: 0.9rem; color: #64748b; font-style: italic; }
+
+        .refs {
+            background: #f1f5f9;
+            padding: 40px;
+            border-radius: 30px;
+            margin-top: 80px;
+            font-size: 0.9rem;
+        }
+        .refs h4 { color: var(--primary); margin-bottom: 15px; text-transform: uppercase; }
+        .refs ul { list-style: none; }
+        .refs li { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Yoga & The Brain</h1>
+        <p>A Study in Neural Plasticity</p>
+    </div>
+</section>
+
+<div class="container section-padding">
+    
+    <div class="essay-body">
+        <h2>Moving Meditation</h2>
+        <p>Yoga has been around for thousands of years, and has always been associated with wellbeing. Yoga is not only good for the body, but the brain! When doing yoga intentionally it could be considered a “moving meditation” which can significantly improve mental health and even the structure of your brain. Research has found that yoga can influence brainwaves, gray matter, and neural connectivity, which improves mental cognition and emotional regulation (<a href="https://www.sciencedirect.com/science/article/abs/pii/S1744388115000110" target="_blank">Desai et al., 2015</a>; <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6971819/" target="_blank">Gothe et al., 2019</a>; <a href="https://www.nbcnews.com/better/health/what-yoga-does-your-brain-ncna794531" target="_blank">Migala, 2018</a>). Desai et al. (2015) explains that “yoga positively affects brainwave activity and brain structure, linked to improve cognition and mood”. Even short term practices of yoga could produce these benefits in brain health and activity, long term practice shows more profound differences in the brain (Gothe et al., 2019).</p>
+        
+        <p>Positive changes in brainwave activity is one of the most beneficial ways yoga can improve mental health, specifically brainwaves linked to cognitive and emotional outcomes. Alpha waves typically increase when one is practicing yoga which can cause a person to feel calm, and relaxed often reducing anxiety symptoms. Beta waves also increase which are linked to a person's focus, and active thinking skills. Theta waves are also increased which are associated with memory processing. According to Desai et al. (2015) “yoga can stimulate multiple brainwaves simultaneously, depending on the practice”. These three brainwaves being stimulated at once can cause deep relaxation, relief, and improve mental clarity and focus all at the same time. If one wishes to increase a specific brainwave they must choose the correct type of yoga, as posture, breathing, and meditation are all types of yoga targeting specific brain waves and activity.</p>
+    </div>
+
+    <div class="lab-widget">
+        <div class="lab-grid">
+            <div class="viz-pane">
+                <svg viewBox="0 0 200 180">
+                    <path id="neural-connection" d="M60,60 Q100,80 140,110" fill="none" stroke="#cbd5e1" stroke-width="2" />
+                    <path id="brain-mass" d="M100,20 C60,20 30,50 30,90 C30,130 60,160 100,160 C140,160 170,130 170,90 C170,50 140,20 100,20" 
+                          fill="none" stroke="#e2e8f0" stroke-width="5" />
+                    <circle id="pfc-node" cx="60" cy="60" r="10" fill="var(--primary)" opacity="0.3" />
+                    <circle id="amy-node" cx="140" cy="110" r="12" fill="var(--stress)" />
+                    <circle id="insula-node" cx="100" cy="100" r="4" fill="var(--zen)" opacity="0.1" />
+                </svg>
+                <div style="position: absolute; top: 25%; left: 15%; font-size: 9px; font-weight: bold; color: var(--primary);">PFC (LOGIC)</div>
+                <div style="position: absolute; top: 50%; left: 54%; transform: translate(-50%, -50%); font-size: 8px; font-weight: bold; color: var(--zen);">INSULA (AWARENESS)</div>
+                <div style="position: absolute; bottom: 30%; right: 10%; font-size: 9px; font-weight: bold; color: var(--stress);">AMYGDALA</div>
+            </div>
+
+            <div class="controls">
+                <h3>Neural Explorer</h3>
+                <input type="range" min="0" max="3" step="1" id="lab-slider" value="0">
+                <div class="labels">
+                    <span>Inactive</span>
+                    <span>6 Weeks</span>
+                    <span>6 Months</span>
+                    <span>6+ Years</span>
+                </div>
+                <div class="stat-card">
+                    <span>Brainwave Feedback</span>
+                    <strong id="status-text">Baseline: Low Focus</strong>
+                </div>
+                <div class="wave-monitor">
+                    <div class="wave-row"><span>Beta (Focus)</span><svg class="wave-svg"><path id="beta-wave" class="wave-path" stroke="#ef4444"></path></svg></div>
+                    <div class="wave-row"><span>Alpha (Relaxation)</span><svg class="wave-svg"><path id="alpha-wave" class="wave-path" stroke="#4f7cff"></path></svg></div>
+                    <div class="wave-row"><span>Theta (Meditation)</span><svg class="wave-svg"><path id="theta-wave" class="wave-path" stroke="#10b981"></path></svg></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="essay-body">
+        <h2>Brain Activity & Structure</h2>
+        <p>Yoga has also been found to make structural changes in the brain. MRI studies show increases in gray matter in parts of the brain in control of memory, attention, and self regulation. The hippocampus is a part of the brain associated with memory and focus, people who practice yoga have shown to have larger hippocampus and increased gray matter (Gothe et al., 2019). The prefrontal cortex which is responsible for active decision making shows “greater cortical thickness” suggesting it strengthens the core executive functioning part of the brain. Yoga is a form of moving meditation as well as a low effort workout for your mind and body, proven to literally change the way your brain functions. People who practice yoga have also shown reduced activity in the amygdala which is a place where stress and negative thoughts live, this reduced activity of negative thoughts can significantly improve emotional regulation skills (Gothe et al., 2019). These structural changes suggest routine practice of yoga can change the structure of your brain for the better and improve mental clarity on a day to day basis.</p>
+
+        <div class="figure-container">
+            <img class="essay-img" src="greymatter.gif" alt="Animated illustration showing gray matter density changes">
+            <span class="caption">This sketch shows gray matter - in the interaction the gray matter would increase in size on scroll.</span>
+        </div>
+
+        <p>According to Migala (2018), regularly practicing yoga can improve executive function especially in adults. She also claims that the meditation piece of yoga can increase brain volume in areas related to awareness, attention, and self reflection which can shrink with age. Another benefit is greater body awareness helping to keep the body feeling young, this happens partly due to certain movements in yoga as well as the meditation piece of yoga that can enlarge the right insula (body awareness region). Migala (2018) recommends doing yoga at least two times per week to notice the benefits of practicing yoga.</p>
+        
+        <h2>Long-Term Benefits</h2>
+        <p>Overall yoga has many benefits for mental health including enhanced mental cognition, memory, attention, emotional regulation, reflection, and focus. Many people start taking supplements to help improve these beneficial effects when in reality nothing is going to help but your habits, and practices. Yoga increases gray matter which supports mental cognition, decision making and memory. It also increases alpha, beta, and theta waves which help with relaxation, focus, and memory processing. Additionally yoga has been found to reduce activity in the amygdala causing symptoms of anxiety and chronic stress to decline. Yoga can physically change the way your brain is structured. For example, it can thicken the structure of the prefrontal cortex, strengthening decision making and active thinking skills. It also can enhance the right Insula increasing body awareness, as well as enlarge the hippocampus which is responsible for long and short term memory processing.</p>
+
+        <div class="figure-container">
+            <img class="essay-img" src="amygdala.gif" alt="GIF showing amygdala activity before and after yoga">
+            <span class="caption">Amygdala before and after 6 weeks of routine yoga practice - orange is amygdala activity.</span>
+        </div>
+    </div>
+
+    <footer class="refs">
+        <h4>Sources</h4>
+        <ul>
+            <li>AsapSCIENCE. (2013). <a href="https://www.youtube.com/watch?v=q0DMYs4b2Yw" target="_blank">How does meditation change the brain?</a></li>
+            <li>Cleveland Clinic. (2026). <a href="https://my.clevelandclinic.org/health/body/24831-grey-matter" target="_blank">Gray matter: What it is & anatomy.</a></li>
+            <li>Desai, R., et al. (2015). <a href="https://www.sciencedirect.com/science/article/abs/pii/S1744388115000110" target="_blank">Effects of yoga on brain waves.</a></li>
+            <li>Gothe NP, et al. (2019). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6971819/" target="_blank">Yoga Effects on Brain Health.</a></li>
+            <li>Goodful. (2022). <a href="https://www.youtube.com/watch?v=GNN-a8Ah0qg" target="_blank">Can six weeks of meditation change your brain?</a></li>
+            <li>Migala, J. (2018). <a href="https://www.nbcnews.com/better/health/what-yoga-does-your-brain-ncna794531" target="_blank">What yoga does to your brain.</a></li>
+        </ul>
+    </footer>
+</div>
+
+<script>
+    const slider = document.getElementById('lab-slider');
+    const pfc = document.getElementById('pfc-node');
+    const amy = document.getElementById('amy-node');
+    const path = document.getElementById('neural-connection');
+    const mass = document.getElementById('brain-mass');
+    const insula = document.getElementById('insula-node');
+    const statusText = document.getElementById('status-text');
+    const betaPath = document.getElementById('beta-wave');
+    const alphaPath = document.getElementById('alpha-wave');
+    const thetaPath = document.getElementById('theta-wave');
+
+    const stages = [
+        { pfcOp: 0.3, pfcR: 10, amyR: 14, amyCol: '#ef4444', massW: 5, massCol: '#e2e8f0', insulaOp: 0.1, pathW: 1, msg: "Baseline: Low Focus", bA: 2, bF: 0.6, aA: 2, aF: 0.2, tA: 1, tF: 0.05 },
+        { pfcOp: 0.6, pfcR: 13, amyR: 11, amyCol: '#f87171', massW: 10, massCol: '#cbd5e1', insulaOp: 0.4, pathW: 4, msg: "6 Weeks: Rising Focus", bA: 5, bF: 0.6, aA: 6, aF: 0.2, tA: 3, tF: 0.08 },
+        { pfcOp: 0.8, pfcR: 17, amyR: 8, amyCol: '#fb923c', massW: 16, massCol: '#185FA5', insulaOp: 0.7, pathW: 8, msg: "6 Months: Sustained Attention", bA: 8, bF: 0.6, aA: 10, aF: 0.2, tA: 6, tF: 0.1 },
+        { pfcOp: 1.0, pfcR: 22, amyR: 5, amyCol: '#10b981', massW: 24, massCol: '#185FA5', insulaOp: 1.0, pathW: 12, msg: "6+ Years: Peak Flow", bA: 12, bF: 0.6, aA: 12, aF: 0.2, tA: 10, tF: 0.12 }
+    ];
+
+    let phase = 0;
+    function generateWavePath(amp, freq, currentPhase) {
+        let d = "M 0 15 ";
+        for (let x = 0; x <= 300; x += 2) {
+            let y = 15 + amp * Math.sin((x + currentPhase) * freq);
+            d += `L ${x} ${y} `;
+        }
+        return d;
+    }
+
+    function animate() {
+        const val = stages[slider.value];
+        betaPath.setAttribute('d', generateWavePath(val.bA, val.bF, phase));
+        alphaPath.setAttribute('d', generateWavePath(val.aA, val.aF, phase));
+        thetaPath.setAttribute('d', generateWavePath(val.tA, val.tF, phase));
+        phase += 2;
+        requestAnimationFrame(animate);
+    }
+
+    function updateUI() {
+        const val = stages[slider.value];
+        pfc.setAttribute('opacity', val.pfcOp);
+        pfc.setAttribute('r', val.pfcR);
+        amy.setAttribute('r', val.amyR);
+        amy.setAttribute('fill', val.amyCol);
+        path.setAttribute('stroke-width', val.pathW);
+        path.setAttribute('stroke', slider.value > 1 ? '#185FA5' : '#cbd5e1');
+        mass.setAttribute('stroke-width', val.massW);
+        mass.setAttribute('stroke', val.massCol);
+        insula.setAttribute('opacity', val.insulaOp);
+        insula.setAttribute('r', 4 + (slider.value * 4));
+        statusText.innerText = val.msg;
+    }
+
+    slider.addEventListener('input', updateUI);
+    updateUI();
+    animate();
+</script>
+</body>
+</html>
